@@ -9,7 +9,7 @@ struct Node
   int key;
   Node* next;
   LLNode* head = NULL;
-  BSTNode* root = NULL;
+  RBTNode* root = NULL;
 };
 
 struct LLNode
@@ -22,9 +22,9 @@ struct LLNode
 struct RBTNode
 {
   int key;
-  BSTNode* left;
-  BSTNode* right;
-  BSTNode* parent;
+  RBTNode* left;
+  RBTNode* right;
+  RBTNode* parent;
   string color;
 
 
