@@ -16,12 +16,12 @@ struct LLNode
   bool head;
 };
 
-struct RBTNode
+struct BSTNode
 {
   int key;
-  RBTNode* left;
-  RBTNode* right;
-  RBTNode* parent;
+  BSTNode* left;
+  BSTNode* right;
+  BSTNode* parent;
   string color;
 };
 
@@ -31,6 +31,8 @@ class HashTable
   public:
     HashTable(string type);
     ~HashTable();
+
+    balancingBST(); 
 
     unsigned int hashFunction1(int key); // hash function to map values to key
     unsigned int hashFunction2(int key);
@@ -49,10 +51,8 @@ class HashTable
     Node *table1;
     Node *table2;
     LLNode* *LLtable;
-    RBTNode* *RBTtable;
+    BSTNode* *BSTtable;
 
     string method;
 
 };
-
-

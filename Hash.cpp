@@ -1,8 +1,51 @@
+
 #include <vector>
 #include <iostream>
 #include <string>
 #include "Hash.hpp"
 using namespace std;
+
+////////////////////////////// FUNCTIONS FOR BALANCING TREE //////////////////////////////
+void storeBSTNodes(RBTNode* root, vector<RBTNode*> &nodes)
+{
+    // Base case
+    if (root==NULL)
+        return;
+
+    // Store nodes in Inorder (which is sorted
+    // order for BST)
+    storeBSTNodes(root->left, nodes);
+    nodes.push_back(root);
+    storeBSTNodes(root->right, nodes);
+}
+
+RBTNode* buildTreeUtil(vector<RBTNode*> &nodes, int start, int end)
+{
+    if (start > end)
+        return NULL;
+
+    int mid = (start + end)/2;
+    RBTNode *root = nodes[mid];
+
+    root->left  = buildTreeUtil(nodes, start, mid-1);
+    root->right = buildTreeUtil(nodes, mid+1, end);
+
+    return root;
+}
+
+
+RBTNode* buildTree(RBTNode* root)
+{
+    // Store nodes of given BST in sorted order
+    vector<RBTNode *> nodes;
+    storeBSTNodes(root, nodes);
+
+    // Constucts BST from nodes[]
+    int n = nodes.size();
+    return buildTreeUtil(nodes, 0, n-1);
+}
+
+////////////////////////////// CONSTRUCTER //////////////////////////////
 
 HashTable::HashTable(string type)
 {
@@ -44,19 +87,27 @@ HashTable::HashTable(string type)
     }
   }
 
-  if (type == "RBT Chaining")
+  if (type == "BST Chaining")
   {
-    method = "RBT Chaining";
+    method = "BST Chaining";
     TABLE_SIZE = 10009;
-    table1 = new RBTNode*[TABLE_SIZE];
+    table1 = new BSTNode*[TABLE_SIZE];
 
     for (int i = 0 ;i < TABLE_SIZE; i++)
     {
-      RBTtable[i] = NULL;
+      BSTtable[i] = NULL;
     }
   }
-
 }
+
+HashTable::balancingBST()
+{
+  for (int i = 0 ;i < TABLE_SIZE; i++)
+  {
+    buildTree(BSTtable[i]);
+  }
+}
+
 
 unsigned int HashTable::hashFunction1(int key)
 {
@@ -66,6 +117,19 @@ unsigned int HashTable::hashFunction1(int key)
 unsigned int HashTable::hashFunction2(int key)
 {
   return Floor(key / TABLE_SIZE);
+}
+
+
+void storeBSTNodes(BSTNode* root, vector<BSTNode*> &nodes)
+{
+
+    if (root==NULL)
+        return;
+
+
+    storeBSTNodes(root->left, nodes);
+    nodes.push_back(root);
+    storeBSTNodes(root->right, nodes);
 }
 
 ////////////////////////////// INSERT //////////////////////////////
@@ -186,11 +250,77 @@ void HashTable::insert(int key, string method)
     }
   }
 
-  if (method == "RBT Chaining")
+  if (method == "BST Chaining")
   {
+
+    if (search(key,method) == true)
+    {
+      cout << "key, " << key << ", already exists... not inserting." << endl;
+      return;
+    }
+    else
+    {
+      index = hashFunction1(key);
+      insertatBST();
+      return;
+    }
 
   }
 
+}
+
+Node * HashTable::createNode(int value, Node * P, Node * L, Node * R){
+	Node * temp = new Node;
+	temp -> key = value;
+	temp -> parent = P;
+	temp -> right = R;
+	temp -> left = L;
+	return temp;
+
+}
+
+void HashTable::insertatBST(int key)
+{
+  Node * temp = root;
+  Node * current = new Node;
+  Node * parentNode = new Node;
+  Node * temp2= new Node;
+
+  if(root = NULL)
+  {
+    root = createNode(value, NULL, NULL, NULL);
+
+  }
+
+  while(temp != NULL)
+  {
+    current = temp;
+    if(value > temp -> key)
+    {
+      temp = temp -> right;
+    }
+    else
+    {
+      temp = temp -> left;
+    }
+  }
+
+  if(parentNode == NULL)
+  {
+    root = createNode(value, NULL, NULL, NULL);
+  }
+
+  else if( value < parentNode -> key)
+  {
+    temp2 = createNode(value, parentNode, NULL, NULL);
+    parentNode -> left = temp2;
+  }
+
+  else( value > parentNode -> key)
+  {
+    temp2 = createNode(value, parentNode, NULL, NULL);
+    parentNode -> right = temp2;
+  }
 }
 
 void HashTable::insertAtLL(LLNode* head, int key)
@@ -274,7 +404,10 @@ void HashTable::cuckooInsert(int key)
   }
 
 }
+
+
 ////////////////////////////// PRINT //////////////////////////////
+
 void HashTable::print(string method)
 {
   if (method == "Linear Probing")
@@ -323,10 +456,27 @@ void HashTable::print(string method)
 
   }
 
-  if (method == "RBT Chaining")
+  if (method == "BST Chaining")
   {
-
+    for (int i = 0; i < TABLE_SIZE; i++)
+    {
+      if (RBTtable[i] != NULL)
+      {
+        cout << i << " || ";
+        preOrderPrintBST(RBTtable[i]);
+        cout << endl;
+      }
+    }
   }
+}
+
+void preOrderPrintBST(BSTNode* node)
+{
+    if (node == NULL)
+        return;
+    printf("%d ", node->key);
+    preOrder(node->left);
+    preOrder(node->right);
 }
 
 void printLL(LLNode* crawler)
@@ -337,6 +487,7 @@ void printLL(LLNode* crawler)
     crawler = crawler -> next;
   }
 }
+
 
 
 ////////////////////////////// SEARCH //////////////////////////////
@@ -386,9 +537,17 @@ bool HashTable::search(int key, string method)
     return false;
   }
 
-  if (method == "RBT Chaining")
+  if (method == "BST Chaining")
   {
+    for (int i = 0; i < TABLE_SIZE; i++)
+    {
+      if (searchBST(LLtable[i], int key) == true)
+      {
+        return true;
+      }
+    }
 
+    return false;
   }
 }
 
@@ -416,9 +575,22 @@ bool searchLL(LLNode* LLNode, int key)
 }
 
 
-bool searchRBT(int key)
+bool searchBST(BSTNode* node, int key)
 {
+  if(root)
+  {
 
+        if(root->key > value && root->left)
+            search(root->left, value);
+
+        else if(root->key < value && root->right)
+            search(root->right, value);
+
+        else if(root->key == value)
+            return root;
+        else
+            return NULL;
+    }
 }
 
 ////////////////////////////// DELETE //////////////////////////////
@@ -467,8 +639,65 @@ void HashTable::delete(int key, string method)
 
   if (method == "RBT Chaining")
   {
+    if (search(key,method) == false)
+    {
+      cout << "key, " << key << ", doesn't exists... cannot delete." << endl;
+      return;
+    }
 
+    else
+    {
+      delete_index = hashFunction1(key);
+
+      deleteBST(key);
+    }
   }
+}
+
+Node* treeMinimum(Node * node){
+	while( node -> left){
+		node = node -> left;
+	}
+	return node;
+}
+
+void deleteBST(int key)
+{
+  Node * node = searchBST(root,value);
+	if(node != root){
+		if(node -> left == NULL && node -> right == NULL){
+			node -> parent -> left = NULL;
+		}
+		else if(node -> left == NULL && node -> right){
+			Node * min = treeMinimum(node -> right);
+			if(min == node -> right){
+				node -> parent -> left = min;
+				min -> parent = node -> parent;
+				min -> left = node -> left;
+				min -> left -> parent = min;
+			}
+			else{
+				min -> parent -> left = min -> right;
+				min -> right -> parent = min -> parent;
+				min -> parent = node -> parent;
+				node -> parent -> left = min;
+				min -> left = node -> left;
+				min -> right = node -> right;
+				node -> right -> parent = min;
+				node -> left -> parent = min;
+			}
+		}
+		else
+    {
+			Node * temp = node -> left;
+			node -> parent -> left = temp;
+			temp -> parent = node -> parent;
+		}
+	}
+	else{
+
+	}
+	delete node;
 }
 
 void deleteLL(LLNode *crawler, int key)
