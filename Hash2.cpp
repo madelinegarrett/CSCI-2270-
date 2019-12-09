@@ -211,6 +211,16 @@ void HashTable::insertAtLL(LLNode* head, int key)
 }
 
 
+Node * HashTable::createNode(int value, Node * P, Node * L, Node * R){
+	Node * temp = new Node;
+	temp -> key = value;
+	temp -> parent = P;
+	temp -> right = R;
+	temp -> left = L;
+	return temp;
+
+}
+
 void insertatBST(int key)
 {
   Node * temp = root;
