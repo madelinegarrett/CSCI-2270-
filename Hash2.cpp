@@ -5,6 +5,7 @@
 #include "Hash.hpp"
 using namespace std;
 
+////////////////////////////// CONSTRUCTER //////////////////////////////
 HashTable::HashTable(string type)
 {
   if (type == "Linear Probing")
@@ -68,6 +69,7 @@ unsigned int HashTable::hashFunction2(int key)
 {
   return floor(key / TABLE_SIZE);
 }
+
 
 ////////////////////////////// INSERT //////////////////////////////
 void HashTable::insert(int key, string method)
@@ -160,10 +162,20 @@ void HashTable::insert(int key, string method)
     }
   }
 
-  //if (method == "RBT Chaining")
-  //{
-//
-  //}
+  if (method == "RBT Chaining")
+  {
+    if (search(key,method) == true)
+    {
+      cout << "key, " << key << ", already exists... not inserting." << endl;
+      return;
+    }
+    else
+    {
+      index = hashFunction1(key);
+      insertatBST();
+      return;
+    }
+  }
 
 }
 
@@ -197,6 +209,52 @@ void HashTable::insertAtLL(LLNode* head, int key)
     return;
   }
 }
+
+
+void insertatBST(int key)
+{
+  Node * temp = root;
+  Node * current = new Node;
+  Node * parentNode = new Node;
+  Node * temp2= new Node;
+
+  if(root = NULL)
+  {
+    root = createNode(value, NULL, NULL, NULL);
+
+  }
+
+  while(temp != NULL)
+  {
+    current = temp;
+    if(value > temp -> key)
+    {
+      temp = temp -> right;
+    }
+    else
+    {
+      temp = temp -> left;
+    }
+  }
+
+  if(parentNode == NULL)
+  {
+    root = createNode(value, NULL, NULL, NULL);
+  }
+
+  else if( value < parentNode -> key)
+  {
+    temp2 = createNode(value, parentNode, NULL, NULL);
+    parentNode -> left = temp2;
+  }
+
+  else( value > parentNode -> key)
+  {
+    temp2 = createNode(value, parentNode, NULL, NULL);
+    parentNode -> right = temp2;
+  }
+}
+
 
 void HashTable::cuckooInsert(int key, int original)
 {
@@ -269,6 +327,15 @@ void printLL(LLNode* crawler)
   }
 }
 
+void preOrderPrintBST(BSTNode* node)
+{
+    if (node == NULL)
+        return;
+    printf("%d ", node->key);
+    preOrder(node->left);
+    preOrder(node->right);
+}
+
 void HashTable::print(string method)
 {
   if (method == "Linear Probing")
@@ -330,7 +397,15 @@ void HashTable::print(string method)
 
   if (method == "RBT Chaining")
   {
-
+    for (int i = 0; i < TABLE_SIZE; i++)
+    {
+      if (RBTtable[i] != NULL)
+      {
+        cout << i << " || ";
+        preOrderPrintBST(RBTtable[i]);
+        cout << endl;
+      }
+    }
   }
 }
 
@@ -372,6 +447,26 @@ bool searchLL(LLNode* LLNode, int key)
     return false;
   }
 }
+
+
+bool searchBST(BSTNode* node, int key)
+{
+  if(root)
+  {
+
+        if(root->key > value && root->left)
+            search(root->left, value);
+
+        else if(root->key < value && root->right)
+            search(root->right, value);
+
+        else if(root->key == value)
+            return root;
+        else
+            return NULL;
+    }
+}
+
 
 bool HashTable::search(int key, string method)
 {
@@ -430,17 +525,22 @@ bool HashTable::search(int key, string method)
     return false;
   }
 
-  //if (method == "RBT Chaining")
-  //{
+  if (method == "RBT Chaining")
+  {
+    for (int i = 0; i < TABLE_SIZE; i++)
+    {
+      if (searchBST(RBTtable[i], int key) == true)
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
   return false;
   //}
 }
 
-
-//bool searchRBT(int key)
-//{
-
-//}
 
 ////////////////////////////// DELETE //////////////////////////////
 void deleteLL(LLNode *crawler, int key)
@@ -466,6 +566,46 @@ void deleteLL(LLNode *crawler, int key)
     delete temp;
   }
 }
+
+void deleteBST(int key)
+{
+  Node * node = searchBST(root,value);
+	if(node != root){
+		if(node -> left == NULL && node -> right == NULL){
+			node -> parent -> left = NULL;
+		}
+		else if(node -> left == NULL && node -> right){
+			Node * min = treeMinimum(node -> right);
+			if(min == node -> right){
+				node -> parent -> left = min;
+				min -> parent = node -> parent;
+				min -> left = node -> left;
+				min -> left -> parent = min;
+			}
+			else{
+				min -> parent -> left = min -> right;
+				min -> right -> parent = min -> parent;
+				min -> parent = node -> parent;
+				node -> parent -> left = min;
+				min -> left = node -> left;
+				min -> right = node -> right;
+				node -> right -> parent = min;
+				node -> left -> parent = min;
+			}
+		}
+		else
+    {
+			Node * temp = node -> left;
+			node -> parent -> left = temp;
+			temp -> parent = node -> parent;
+		}
+	}
+	else{
+
+	}
+	delete node;
+}
+
 
 void HashTable::delete1(int key, string method)
 {
@@ -541,6 +681,17 @@ void HashTable::delete1(int key, string method)
 
   if (method == "RBT Chaining")
   {
+    if (search(key,method) == false)
+    {
+      cout << "key, " << key << ", doesn't exists... cannot delete." << endl;
+      return;
+    }
 
+    else
+    {
+      delete_index = hashFunction1(key);
+
+      deleteBST(key);
+    }
   }
 }
