@@ -98,7 +98,6 @@ void HashTable::insert(int key, string method)
 
         index++;
       }
-
       cout << "table1 (used for linear probing) is full. did not insert " << key << endl;
       return;
     }
@@ -218,8 +217,10 @@ Node * HashTable::createNode(int value, Node * P, Node * L, Node * R){
 	temp -> right = R;
 	temp -> left = L;
 	return temp;
-
 }
+
+
+
 
 void insertatBST(int key)
 {
@@ -231,7 +232,6 @@ void insertatBST(int key)
   if(root = NULL)
   {
     root = createNode(value, NULL, NULL, NULL);
-
   }
 
   while(temp != NULL)
@@ -263,6 +263,7 @@ void insertatBST(int key)
     temp2 = createNode(value, parentNode, NULL, NULL);
     parentNode -> right = temp2;
   }
+
 }
 
 
