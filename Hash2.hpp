@@ -44,13 +44,14 @@ class HashTable
     void print(string method);
     bool search(int key, string method);
     void delete1(int key, string method);
+    Node *createNode(int value, Node* P, Node* L,Node* R);
 
   private:
 
     int TABLE_SIZE;
     int TABLE_SIZE2;
 
-    RBTNode root;
+    RBTNode* root = NULL;
     Node *table1;
     Node *table2;
     LLNode* *LLtable;
@@ -62,28 +63,22 @@ class HashTable
 
 /*
 Helper functions:
-
 For search:
 LLNode* searchLL(int key);
 RBTNode* searchRBT(int key);
-
 For Insert:
 LLNode* insertToLL(int key);
 RBTNode* insertToRBT(int key); // root = insertToBST;
-
 For Delete:
 RBTNode* deleteAtRBT(TreeNode* root, int key); //root = deleteInRBT(root, key);
 void deleteAtLL(Node* origin, int key); // deleteAtLL(origin, key) call with origin in order to update its head (origin -> head)
-
 For Printing:
 void printLL(LLNode* head); //printLL(origin -> head);
 void printRBT(RBTNode* root); //printRBT(origin -> root);
-
 For Red Black Tree: // MADELINE
 bool isRedBlack(RBTNode* root); // isRedBlack(origin -> root); //check by the criterias in we learned in class
 RBTNode* pivot(RBTNode* root, key item);
 void reColor() ??
-
 */
 
 #endif
