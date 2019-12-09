@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include <cmath>
-#include "Hash.hpp"
+#include "Hash2.hpp"
 using namespace std;
 
 ////////////////////////////// CONSTRUCTER //////////////////////////////
@@ -171,7 +171,7 @@ void HashTable::insert(int key, string method)
     else
     {
       index = hashFunction1(key);
-      insertatBST();
+      insertatBST(key);
       return;
     }
   }
@@ -210,8 +210,8 @@ void HashTable::insertAtLL(LLNode* head, int key)
 }
 
 
-Node * HashTable::createNode(int value, Node * P, Node * L, Node * R){
-	Node * temp = new Node;
+RBTNode * HashTable::createNode(int value, Node * P, Node * L, Node * R){
+	RBTNode * temp = new RBTNode;
 	temp -> key = value;
 	temp -> parent = P;
 	temp -> right = R;
@@ -224,10 +224,10 @@ Node * HashTable::createNode(int value, Node * P, Node * L, Node * R){
 
 void insertatBST(int key)
 {
-  Node * temp = root;
-  Node * current = new Node;
-  Node * parentNode = new Node;
-  Node * temp2= new Node;
+  RBTNode * temp = root;
+  RBTNode * current = new Node;
+  RBTNode * parentNode = new Node;
+  RBTNode * temp2= new Node;
 
   if(root = NULL)
   {
