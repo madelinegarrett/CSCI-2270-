@@ -2,8 +2,8 @@
 #include <iostream>
 #include <string>
 #include <cmath>
-#include "Hash2.hpp"
-using namespace std;
+#include "Hash.hpp"
+
 
 ////////////////////////////// CONSTRUCTER //////////////////////////////
 HashTable::HashTable(string type)
@@ -210,7 +210,7 @@ void HashTable::insertAtLL(LLNode* head, int key)
 }
 
 
-RBTNode * HashTable::createNode(int value, Node * P, Node * L, Node * R){
+RBTNode * HashTable::createNode(int value, RBTNode * P, RBTNode * L, RBTNode * R){
 	RBTNode * temp = new RBTNode;
 	temp -> key = value;
 	temp -> parent = P;
@@ -222,22 +222,22 @@ RBTNode * HashTable::createNode(int value, Node * P, Node * L, Node * R){
 
 
 
-void insertatBST(int key)
+void HashTable::insertatBST(int key)
 {
   RBTNode * temp = root;
-  RBTNode * current = new Node;
-  RBTNode * parentNode = new Node;
-  RBTNode * temp2= new Node;
+  RBTNode * current = new RBTNode;
+  RBTNode * parentNode = new RBTNode;
+  RBTNode * temp2= new RBTNode;
 
-  if(root = NULL)
+  if(root == NULL)
   {
-    root = createNode(value, NULL, NULL, NULL);
+    root = createNode(key, NULL, NULL, NULL);
   }
 
   while(temp != NULL)
   {
     current = temp;
-    if(value > temp -> key)
+    if(key > temp -> key)
     {
       temp = temp -> right;
     }
@@ -249,18 +249,18 @@ void insertatBST(int key)
 
   if(parentNode == NULL)
   {
-    root = createNode(value, NULL, NULL, NULL);
+    root = createNode(key, NULL, NULL, NULL);
   }
 
-  else if( value < parentNode -> key)
+  if( key < parentNode -> key)
   {
-    temp2 = createNode(value, parentNode, NULL, NULL);
+    temp2 = createNode(key, parentNode, NULL, NULL);
     parentNode -> left = temp2;
   }
 
-  else( value > parentNode -> key)
+  if( key > parentNode -> key)
   {
-    temp2 = createNode(value, parentNode, NULL, NULL);
+    temp2 = createNode(key, parentNode, NULL, NULL);
     parentNode -> right = temp2;
   }
 
@@ -338,13 +338,13 @@ void printLL(LLNode* crawler)
   }
 }
 
-void preOrderPrintBST(BSTNode* node)
+void preOrderPrintBST(RBTNode* node)
 {
     if (node == NULL)
         return;
     printf("%d ", node->key);
-    preOrder(node->left);
-    preOrder(node->right);
+    preOrderPrintBST(node->left);
+    preOrderPrintBST(node->right);
 }
 
 void HashTable::print(string method)
@@ -460,22 +460,22 @@ bool searchLL(LLNode* LLNode, int key)
 }
 
 
-bool searchBST(BSTNode* node, int key)
+bool HashTable::searchBST(RBTNode* node, int key)
 {
   if(root)
   {
+        if(root->key > key && root->left)
+            searchBST(root->left, key);
 
-        if(root->key > value && root->left)
-            search(root->left, value);
+        else if(root->key < key && root->right)
+            searchBST(root->right, key);
 
-        else if(root->key < value && root->right)
-            search(root->right, value);
-
-        else if(root->key == value)
+        else if(root->key == key)
             return root;
         else
-            return NULL;
+            return false;
     }
+    return false;
 }
 
 
@@ -540,7 +540,7 @@ bool HashTable::search(int key, string method)
   {
     for (int i = 0; i < TABLE_SIZE; i++)
     {
-      if (searchBST(RBTtable[i], int key) == true)
+      if (searchBST(RBTtable[i], key) == true)
       {
         return true;
       }
@@ -578,15 +578,33 @@ void deleteLL(LLNode *crawler, int key)
   }
 }
 
-void deleteBST(int key)
+RBTNode* HashTable::searchdeleteBST(RBTNode * node, int searchkey){
+	if(node){
+		if(node -> key  == searchkey){
+			return node;
+		}
+		else if(node -> key > searchkey){
+			return search(node -> left, searchkey);
+		}
+		else{
+			return search(node -> right, searchkey);
+		}
+	}
+	else{
+		return NULL;
+	}
+}
+
+
+void HashTable::deleteBST(int key)
 {
-  Node * node = searchBST(root,value);
+  RBTNode * node = searchdeleteBST(root,key);
 	if(node != root){
 		if(node -> left == NULL && node -> right == NULL){
 			node -> parent -> left = NULL;
 		}
 		else if(node -> left == NULL && node -> right){
-			Node * min = treeMinimum(node -> right);
+			RBTNode * min = treeMinimum(node -> right);
 			if(min == node -> right){
 				node -> parent -> left = min;
 				min -> parent = node -> parent;
@@ -606,13 +624,10 @@ void deleteBST(int key)
 		}
 		else
     {
-			Node * temp = node -> left;
+			RBTNode * temp = node -> left;
 			node -> parent -> left = temp;
 			temp -> parent = node -> parent;
 		}
-	}
-	else{
-
 	}
 	delete node;
 }
