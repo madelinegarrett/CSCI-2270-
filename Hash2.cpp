@@ -3,7 +3,7 @@
 #include <string>
 #include <cmath>
 #include "Hash.hpp"
-
+using namespace std;
 
 ////////////////////////////// CONSTRUCTER //////////////////////////////
 HashTable::HashTable(string type)
@@ -584,15 +584,23 @@ RBTNode* HashTable::searchdeleteBST(RBTNode * node, int searchkey){
 			return node;
 		}
 		else if(node -> key > searchkey){
-			return search(node -> left, searchkey);
+			return searchdeleteBST(node -> left, searchkey);
 		}
 		else{
-			return search(node -> right, searchkey);
+			return searchdeleteBST(node -> right, searchkey);
 		}
 	}
 	else{
 		return NULL;
 	}
+}
+
+RBTNode* treeMinimum(RBTNode * node)
+{
+	while( node -> left){
+		node = node -> left;
+	}
+	return node;
 }
 
 
