@@ -1,0 +1,62 @@
+------ Load factor = 0.1 ------
+Linear Probing Insert: 431.93 microseconds
+printing LL Table
+
+LL Chaining Insert: 390.07 microseconds
+---------------------
+Linear Probing Delete: 363.8 microseconds
+LL Chaining Delete: 392.79 microseconds
+---------------------
+Linear Probing Lookup: 723.69 microseconds
+LL Chaining Lookup: 785.46 microseconds
+---------------------
+------ Load factor = 0.2 ------
+Linear Probing Insert: 362.09 microseconds
+LL Chaining Insert: 389.56 microseconds
+---------------------
+Linear Probing Delete: 363.84 microseconds
+LL Chaining Delete: 390.47 microseconds
+---------------------
+Linear Probing Lookup: 733.92 microseconds
+LL Chaining Lookup: 780.4 microseconds
+---------------------
+------ Load factor = 0.5 ------
+Linear Probing Insert: 363.18 microseconds
+LL Chaining Insert: 384.19 microseconds
+---------------------
+Linear Probing Delete: 382.91 microseconds
+LL Chaining Delete: 397.6 microseconds
+---------------------
+Linear Probing Lookup: 750.98 microseconds
+LL Chaining Lookup: 795.35 microseconds
+---------------------
+------ Load factor = 0.7 ------
+Linear Probing Insert: 365.93 microseconds
+LL Chaining Insert: 395.28 microseconds
+---------------------
+Linear Probing Delete: 371.32 microseconds
+LL Chaining Delete: 394.11 microseconds
+---------------------
+Linear Probing Lookup: 743.51 microseconds
+LL Chaining Lookup: 788.68 microseconds
+---------------------
+------ Load factor = 0.9 ------
+Linear Probing Insert: 362.85 microseconds
+LL Chaining Insert: 392.4 microseconds
+---------------------
+Linear Probing Delete: 372.43 microseconds
+LL Chaining Delete: 397.32 microseconds
+---------------------
+Linear Probing Lookup: 745.69 microseconds
+LL Chaining Lookup: 795.17 microseconds
+---------------------
+------ Load factor = 1.0 ------
+Linear Probing Insert: 368.24 microseconds
+LL Chaining Insert: 398.91 microseconds
+---------------------
+Linear Probing Delete: 367.76 microseconds
+LL Chaining Delete: 395.9 microseconds
+---------------------
+Linear Probing Lookup: 765.79 microseconds
+LL Chaining Lookup: 795.17 microseconds
+---------------------
